@@ -69,7 +69,20 @@
  *****  saveStory(String filename) - Save the currently displayed in the TextArea story to the filename typed    *****
  *****                               in by the user to the "Filename" TextField                                  *****
  *****                clearStory() - Clear the text in the TextArea (If the TextArea is currently editable)      *****
- ***** insertLineBreak(String str) - Insert a line break after every 50 characters of the story                  *****
+ ***** insertLineBreak(String str) - Insert a line break after every 50 characters of the story unless the       *****
+ *****                               50th Character is not a space, in that case, wait until the next            *****
+ *****                               whitespace Character to insert a line break                                 *****
+ *****___________________________________________________________________________________________________________*****
+ *****                           The program will have the following EventHandlers:                              *****
+ *****         "Edit" RadioButton - Uses a Nested-Inner-Class to make the TextArea editable and                  *****
+ *****                              set the String text of the "Status" Label to "Text area editable"            *****
+ *****      "No Edit" RadioButton - Uses a Nested-Inner-Class to make the TextArea not editable and              *****
+ *****                              set the String text of the "Status" Label to "Text area not editable"        *****
+ *****          "Generate" Button - Calls the generateStory() method                                             *****
+ *****             "Clear" Button - Calls the clearStory() method                                                *****
+ *****              "Load" Button - Calls the loadStory(String filename) method                                  *****
+ *****              "Save" Button - Calls the saveStory(String filename) method                                  *****
+ *****              "Quit" Button - Executes System.exit(0);                                                     *****
  *********************************************************************************************************************
  *********************************************************************************************************************/
 
@@ -280,8 +293,7 @@ public class Main extends Application {
             // Set the TextArea to display the story as editable
             txtAreaGenStory.setEditable(true);
 
-            // Clear the String text in the status Label and then Set the String Text
-            lblStatus.setText("");
+            // Set the String Text in the status Label
             lblStatus.setText("Text area editable");
         };
 
@@ -290,8 +302,7 @@ public class Main extends Application {
             // Set the TextArea to display the story as not editable
             txtAreaGenStory.setEditable(false);
 
-            // Clear the String text in the status Label and then Set the String Text
-            lblStatus.setText("");
+            // Set the String Text in the status Label
             lblStatus.setText("Text area not editable");
         };
 
@@ -419,14 +430,12 @@ public class Main extends Application {
             // Set the String text of the TextArea to the String variable story
             txtAreaGenStory.setText(story);
 
-            // Clear the String text in the status Label, then Set the String text
-            lblStatus.setText("");
+            // Set the String text of the status Label
             lblStatus.setText("Story created");
         }
         // else block to execute if the TextArea is currently not editable
         else{
-            // Clear the String text in the status Label, then Set the String text
-            lblStatus.setText("");
+            // Set the String text in the status Label
             lblStatus.setText("Create failure: TextArea not editable");
         }
 
@@ -476,8 +485,7 @@ public class Main extends Application {
                         txtAreaGenStory.setText("");
                         txtAreaGenStory.setText(story);
 
-                        // Clear the String text in the status Label, then Set the String text
-                        lblStatus.setText("");
+                        // Set the String text in the status Label
                         lblStatus.setText("Story loaded");
 
                         // Clear the String text filename from the TextField, to prevent accidentally loading that file
@@ -486,8 +494,7 @@ public class Main extends Application {
                     }
                     // else block to execute if the TextArea is not editable
                     else {
-                        // Clear the String text in the status Label, then Set the String text
-                        lblStatus.setText("");
+                        // Set the String text in the status Label
                         lblStatus.setText("Load failure: TextArea not editable");
                     }
                 }
@@ -495,15 +502,12 @@ public class Main extends Application {
         }
         // Catch block to handle IOException
         catch(IOException iOExc){
-            // Clear the status Label and then display the IOException in the status Label
-            lblStatus.setText("");
+            // Display the IOException in the status Label
             lblStatus.setText(String.valueOf(iOExc));
         }
         // Catch block to handle any other Exceptions
         catch(Exception exc){
-            // Clear the String text of the status Label and then Set the String text of the status Label to the
-                // Exception that was triggered
-            lblStatus.setText("");
+            // Set the String text of the status Label to the Exception that was triggered
             lblStatus.setText(String.valueOf(exc));
         }
         // Finally block to close the Scanner if it is not Null
@@ -543,8 +547,7 @@ public class Main extends Application {
                     // PrintWriter
                 printWriter.println(story);
 
-                // Clear the String text in the status Label, then Set the String text
-                lblStatus.setText("");
+                // Set the String text in the status Label
                 lblStatus.setText("Story saved");
 
                 // Clear the String text filename from the TextField, to prevent accidentally overwriting that file
@@ -553,15 +556,12 @@ public class Main extends Application {
         }
         // Catch block to handle IOException
         catch(IOException iOExc){
-            // Clear the status Label and then display the IOException in the status Label
-            lblStatus.setText("");
+            // Display the IOException in the status Label
             lblStatus.setText(String.valueOf(iOExc));
         }
         // Catch block to handle any other Exceptions
         catch(Exception exc){
-            // Clear the String text of the status Label and then Set the String text of the status Label to the
-                // Exception that was triggered
-            lblStatus.setText("");
+            // Set the String text of the status Label to the Exception that was triggered
             lblStatus.setText(String.valueOf(exc));
         }
         // Finally block used to close the PrintWriter if it is not Null
@@ -583,8 +583,7 @@ public class Main extends Application {
         if(txtAreaGenStory.isEditable()) {
             // if statement block that checks if the TextArea is currently empty or contains no String text
             if (txtAreaGenStory.getText().length() == 0) {
-                // Clear all the String text in the status Label and then Set the String text of the status Label as below
-                lblStatus.setText("");
+                // Set the String text of the status Label as below
                 lblStatus.setText("No story to clear");
             }
             // else statement block to execute if the TextArea contains String text
@@ -592,15 +591,13 @@ public class Main extends Application {
                 // Clear all the String text in the TextArea
                 txtAreaGenStory.setText("");
 
-                // Clear all the String text in the status Label and then Set the String text of the status Label as below
-                lblStatus.setText("");
+                // Set the String text of the status Label as below
                 lblStatus.setText("Story cleared");
             }
         }
         // else statement to execute if the TextArea is currently not editable
         else {
-            // Clear all the String text in the status Label and then Set the String text of the status Label as below
-            lblStatus.setText("");
+            // Set the String text of the status Label as below
             lblStatus.setText("Clear failure: TextArea not editable");
         }
     }
@@ -615,22 +612,35 @@ public class Main extends Application {
         }
 
         // LOCAL VARIABLE(s) declaration(s)
+        // The position where the line break is added
         final int OFF_SET = 49;
+        // Used to locate the first occurrence of white space character starting at the off set
         int start = OFF_SET;
+        // Used to locate where the next line starts
         int currentPosition = 0;
         StringBuilder result = new StringBuilder();
 
-        // while loop used to go through the entire String
+        // while loop used to go through the entire String while the starting position of the next line is still
+            // less than the length of the given string
         while(start <= str.length()) {
+            // retrieve the index of the first whitespace character starting at the offset which is start
             int index = str.indexOf(" ", start);
+            // if statement block to check if a white character exists
             if(index != -1) {
+                // append the new line from the start of the line to the position where the whitespace was found
                 result.append(str.substring(currentPosition, index))
+                        // add a line break
                         .append("\n");
+                // update the start and current position and the offset
                 index++;
                 start = index;
                 currentPosition = index;
                 start += OFF_SET;
-            } else {
+            }
+            // else statement block used if no whitespace is found at that index
+            else {
+                // here no whitespace is found we increment start so that it reaches a value greater than the length
+                    // of the given string and eventually the loop ends
                 start++;
             }
         }
