@@ -342,8 +342,8 @@ public class Main extends Application {
         String[] arrayIntendedChar = {"Dorothy", "Wonder Woman", "Hercules", "Paul McCartney", "E.T.", "Cheshire Cat"};
         String[] arrayActualChar = {"Bill Gates", "Steve Wozniak", "George Clooney", "Sylvester Stallone", "Neil Young",
                 "Les Claypool"};
-        String[] arrayIntendedDestActivity = {"climb the highest mountain", "be going to the theater",
-                "eat at a 5-star restaurant", "taking soil samples", "go swimming", "go snowboarding"};
+        String[] arrayIntendedDestActivity = {"climb the highest mountain", "go to the theater",
+                "eat at a 5-star restaurant", "take some soil samples", "go swimming", "go snowboarding"};
         String[] arrayTravelEvent = {"got mugged", "lost luggage", "broke a leg", "got lost", "got sick",
                 "got mauled by a Koala"};
         String[] arrayTravelMeans = {"by plane", "by car", "on a bus", "in a rocket", "on a boat", "on a train"};
@@ -355,15 +355,15 @@ public class Main extends Application {
 
         // Check if Male RadioButton is Selected and add to the story with a male name if so
         if(rdoBtnMale.isSelected()){
-            story += arrayMaleNames[generator.nextInt(arrayMaleNames.length)] + " ";
+            story += arrayMaleNames[generator.nextInt(arrayMaleNames.length)];
         }
         // Check if Female RadioButton is Selected and add to the story with a female name if so
         else if(rdoBtnFemale.isSelected()){
-            story += arrayFemaleNames[generator.nextInt(arrayFemaleNames.length)] + " ";
+            story += arrayFemaleNames[generator.nextInt(arrayFemaleNames.length)];
         }
         // Check if Other RadioButton is Selected and add to the story with a other name if so
         else if(rdoBtnOther.isSelected()){
-            story += arrayOtherNames[generator.nextInt(arrayOtherNames.length)] + " ";
+            story += arrayOtherNames[generator.nextInt(arrayOtherNames.length)];
         }
 
         // Add the location the main character is travelling to
@@ -373,12 +373,12 @@ public class Main extends Application {
         // Check if the CheckBox for Starting Location is Selected and add it to the story if so
         if(chkBoxStartLocation.isSelected()){
             story += " from ";
-            story += arrayStartCities[generator.nextInt(arrayStartCities.length)] + " ";
+            story += arrayStartCities[generator.nextInt(arrayStartCities.length)];
         }
         // Check if the CheckBox for Intended to meet is Selected and add it to the story if so
         if(chkBoxIntendedChar.isSelected()){
             story += " planning to meet ";
-            story += arrayIntendedChar[generator.nextInt(arrayIntendedChar.length)] + " ";
+            story += arrayIntendedChar[generator.nextInt(arrayIntendedChar.length)] + " and";
         }
 
         // Add the planned destination activity
@@ -387,28 +387,28 @@ public class Main extends Application {
 
         // Check if the CheckBox for Actually met is Selected and add it to the story if so
         if(chkBoxActualChar.isSelected()){
-            story += " and ended up meeting ";
-            story += arrayActualChar[generator.nextInt(arrayActualChar.length)] + " ";
+            story += ". Ended up meeting ";
+            story += arrayActualChar[generator.nextInt(arrayActualChar.length)];
         }
         // Check if the CheckBox for Travelled by is Selected and add it to the story if so
         if(chkBoxTravelMeans.isSelected()){
-            story += " ended up traveling ";
-            story += arrayTravelMeans[generator.nextInt(arrayTravelMeans.length)] + " ";
+            story += ", having had travelled ";
+            story += arrayTravelMeans[generator.nextInt(arrayTravelMeans.length)];
         }
         // Check if the CheckBox for En route action is Selected and add it to the story if so
         if(chkBoxEnRouteEvent.isSelected()){
             story += " but en route ";
-            story += arrayTravelEvent[generator.nextInt(arrayTravelEvent.length)] + " ";
+            story += arrayTravelEvent[generator.nextInt(arrayTravelEvent.length)];
         }
 
         // Add to the story the actual event that happened at the destination
-        story += " and at the destination ";
-        story += arrayDestEvent[generator.nextInt(arrayDestEvent.length)];
+        story += ", but at the destination ";
+        story += arrayDestEvent[generator.nextInt(arrayDestEvent.length)] + ".";
 
         // Check if the CheckBox for Moral of story is Selected and add it to the story if so
         if(chkBoxMoral.isSelected()){
-            story += " so let the moral of the story be known .... ";
-            story += arrayMoral[generator.nextInt(arrayMoral.length)] + " ";
+            story += " So let the moral of the story be known .... ";
+            story += arrayMoral[generator.nextInt(arrayMoral.length)] + ".";
         }
 
         // Check if the TextArea is Editable before posting the generated story to the TextArea
@@ -608,10 +608,37 @@ public class Main extends Application {
 
     // Method to insert a line break after every 50 characters
     public String insertLineBreak(String str){
-        // Replace every 50th Character with a line break
-        String parsedStr = str.replaceAll("(.{50})", "$1\n");
+        // if statement block used to check that the current parsed String is less than 50 Characters long and
+            // if so, return the String with a line break at the end of it
+        if(str.length() < 50) {
+            return str + "\n";
+        }
 
-        // Return the String
-        return parsedStr;
+        // LOCAL VARIABLE(s) declaration(s)
+        final int OFF_SET = 49;
+        int start = OFF_SET;
+        int currentPosition = 0;
+        StringBuilder result = new StringBuilder();
+
+        // while loop used to go through the entire String
+        while(start <= str.length()) {
+            int index = str.indexOf(" ", start);
+            if(index != -1) {
+                result.append(str.substring(currentPosition, index))
+                        .append("\n");
+                index++;
+                start = index;
+                currentPosition = index;
+                start += OFF_SET;
+            } else {
+                start++;
+            }
+        }
+
+        result.append(str.substring(currentPosition))
+                .append("\n");
+
+        // Return the parsed String that has had line breaks inserted into the String
+        return result.toString();
     }
 }
